@@ -77,6 +77,13 @@ void restartTerminal() {
     printlog("[RANDOM] Terminal restarted (cleaned)");
 }
 
+std::string read(std::string prefix) {
+    std::cout << prefix;
+    std::string result;
+    std::getline(std::cin, result);
+    return result;
+}
+
 // ACT 3: INSTALLER
 
 int main() {
@@ -104,6 +111,13 @@ int main() {
         print("3) ");
         setConsoleColor();
         println("Quit from this installer");
+
+        std::string sel = read("# ");
+        if (sel == "3") {
+            break;
+        } else {
+            MessageBoxA(NULL, "Invalid option", "The option that you selected is invalid.", MB_OK | MB_ICONINFORMATION);
+        }
     }
     return 0;
 }
