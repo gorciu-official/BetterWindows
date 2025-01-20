@@ -99,7 +99,11 @@ int main() {
         setConsoleColor(8);
         print("2) ");
         setConsoleColor();
-        println("Check health");
+        println("Check \"non-corrupted Windows\" BetterWindows's requirement");
+        setConsoleColor(8);
+        print("3) ");
+        setConsoleColor();
+        println("Quit from this installer");
     }
     return 0;
 }
