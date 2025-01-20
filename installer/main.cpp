@@ -113,10 +113,19 @@ int main() {
         println("Quit from this installer");
 
         std::string sel = read("# ");
-        if (sel == "3") {
+        if (sel == "1") {
+            break;
+        } else if (sel == "2") {
+            restartTerminal();
+            setConsoleColor();
+            println("Please wait for some `The component store...`. If you see it, you have corrupted Windows.");
+            println("If you see `The operation completed successfully.` - press any key.");
+            system("DISM /Online /Cleanup-Image /ScanHealth");
+            system("pause > nul");
+        } else if (sel == "3") {
             break;
         } else {
-            MessageBoxA(NULL, "Invalid option", "The option that you selected is invalid.", MB_OK | MB_ICONINFORMATION);
+            MessageBoxExA(NULL, "The option that you selected is invalid.", "Invalid option", MB_OK | MB_ICONINFORMATION, 0);
         }
     }
     return 0;
