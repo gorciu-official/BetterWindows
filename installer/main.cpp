@@ -33,48 +33,14 @@ void printnl() {
     println("\n");
 }
 
-std::string readlog() {
-    std::ifstream file("bw.installer.temp/log.log");
-
-    if (!file.is_open()) {
-        return "";
-    }
-
-    std::string str;
-    std::string file_contents;
-
-    while (std::getline(file, str)) {
-        file_contents += str;
-        file_contents.push_back('\n');
-    }
-
-    file.close();
-
-    return str;
-}
-
-void printlog(std::string something) {
-    std::ofstream file("bw.installer.temp/log.log");
-    if (!file.is_open()) {
-        println("Error while trying to use logging.");
-        while (true) continue;
-        return;
-    }
-
-    file << readlog() << something << std::endl;
-    file.close();
-}
-
 void setConsoleColor(int fg = 0x0F, int bg = 0) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, (WORD)((bg << 4) | fg)); 
-    printlog("[RANDOM] Color changed to " + std::to_string(fg) + " (foreground) and " + std::to_string(bg) + " (background)");
 }
 
 void restartTerminal() {
     setConsoleColor();
     system("cls");
-    printlog("[RANDOM] Terminal restarted (cleaned)");
 }
 
 std::string read(std::string prefix) {
@@ -88,7 +54,6 @@ std::string read(std::string prefix) {
 
 int main() {
     system("if not exist bw.installer.temp md bw.installer.temp");
-    printlog("[IMPORTANT] New startup of BetterWindows installer");
     while (true) {
         restartTerminal();
         setConsoleColor(0x0f, 1);
