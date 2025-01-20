@@ -82,18 +82,24 @@ void restartTerminal() {
 int main() {
     system("if not exist bw.installer.temp md bw.installer.temp");
     printlog("[IMPORTANT] New startup of BetterWindows installer");
-    restartTerminal();
-    setConsoleColor(0x0f, 1);
-    println("BetterWindows - a solution to make Windows better, without need for reinstall");
-    setConsoleColor();
-    printnl();
-    println("Windows sucks these days... There are actually people who will use it.");
-    println("You probably don't want to switch to a different operating system, but you want");
-    println("to make it a little better. If that describes you - go and use my project.");
-    printnl();
-    setConsoleColor(8);
-    print("1) ");
-    setConsoleColor();
-    println("Install BetterWindows");
+    while (true) {
+        restartTerminal();
+        setConsoleColor(0x0f, 1);
+        println("BetterWindows - a solution to make Windows better, without need for reinstall");
+        setConsoleColor();
+        printnl();
+        println("Windows sucks these days... There are actually people who will use it.");
+        println("You probably don't want to switch to a different operating system, but you want");
+        println("to make it a little better. If that describes you - go and use my project.");
+        printnl();
+        setConsoleColor(8);
+        print("1) ");
+        setConsoleColor();
+        println("Install BetterWindows");
+        setConsoleColor(8);
+        print("2) ");
+        setConsoleColor();
+        println("Check health");
+    }
     return 0;
 }
