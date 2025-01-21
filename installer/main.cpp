@@ -75,7 +75,7 @@ int main() {
         std::string sel = read("# ");
         if (sel == "1") {
             system("md C:\\BetterWindows\\temp\\installer");
-            system("curl -L https://gorciu-official/BetterWindows/online-content/RemoveBloatware.ps1 -o C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
+            system("curl -s -L https://raw.githubusercontent.com/gorciu-official/BetterWindows/refs/heads/main/online-content/RemoveBloatware.ps1 -o C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
             system("C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
             break;
         } else if (sel == "2") {
