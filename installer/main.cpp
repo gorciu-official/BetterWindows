@@ -1,6 +1,6 @@
 /**
  * ======================================= BW =======================================
- *   BetterWindows - a solution to make Windows better, without need for reinstall
+ *   BetterWindows - a solution to make Windows better
  * 
  * (c) 2024 Gorciu
  */
@@ -53,7 +53,6 @@ std::string read(std::string prefix) {
 // ACT 3: INSTALLER
 
 int main() {
-    system("if not exist bw.installer.temp md bw.installer.temp");
     while (true) {
         restartTerminal();
         setConsoleColor(0x0f, 1);
@@ -71,23 +70,15 @@ int main() {
         setConsoleColor(8);
         print("2) ");
         setConsoleColor();
-        println("Check \"non-corrupted Windows\" BetterWindows's requirement");
-        setConsoleColor(8);
-        print("3) ");
-        setConsoleColor();
         println("Quit from this installer");
 
         std::string sel = read("# ");
         if (sel == "1") {
+            system("md C:\\BetterWindows\\temp\\installer");
+            system("curl -L https://gorciu-official/BetterWindows/online-content/RemoveBloatware.ps1 -o C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
+            system("C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
             break;
         } else if (sel == "2") {
-            restartTerminal();
-            setConsoleColor();
-            println("Please wait for some `The component store...`. If you see it, you have corrupted Windows.");
-            println("If you see `The operation completed successfully.` - press any key.");
-            system("DISM /Online /Cleanup-Image /ScanHealth");
-            system("pause > nul");
-        } else if (sel == "3") {
             break;
         } else {
             MessageBoxExA(NULL, "The option that you selected is invalid.", "Invalid option", MB_OK | MB_ICONINFORMATION, 0);
