@@ -9,7 +9,7 @@ endif
 all: installer installout
 
 installer:
-	g++ installer/main.cpp -o installer/out$(SUFFIX)
+	g++ installer/main.cpp -o installer/out$(SUFFIX) -Wl, --manifest,installer/app.manifest
 
 winman:
 	$(error Actually pretty useless right now)
