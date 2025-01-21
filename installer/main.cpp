@@ -16,7 +16,6 @@
 #endif 
 
 #include <iostream>
-#include <fstream>
 #include <windows.h>
 
 // ACT 2: INTERNALS
