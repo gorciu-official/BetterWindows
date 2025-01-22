@@ -76,6 +76,8 @@ int main() {
             system("md C:\\BetterWindows\\temp\\installer");
             system("curl -s -L https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/RemoveBloatware.ps1 -o C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
             system("C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
+            system("curl -s -L https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/ActualInstaller.ps1 -o C:\\BetterWindows\\temp\\installer\\installer.ps1");
+            system("C:\\BetterWindows\\temp\\installer\\installer.ps1");
             break;
         } else if (sel == "2") {
             break;
