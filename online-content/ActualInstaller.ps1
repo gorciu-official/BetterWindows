@@ -21,5 +21,9 @@ if ($checksum.Hash -eq $expectedChecksum) {
         Start-Sleep -Seconds 5
     }
 }
+Write-Host "Copying `winman` to the correct location..." -ForegroundColor Yellow
+Copy-Item "C:\BetterWindows\temp\winman.exe" "C:\BetterWindows\winman.exe"
+Write-Host "Installing required packages..." -ForegroundColor Yellow
+cmd.exe /c "C:\BetterWindows\winman.exe -I base"
 
 Write-Host "BetterWindows has been successfully installed!" -ForegroundColor Green
