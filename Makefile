@@ -13,7 +13,7 @@ installer:
 	g++ installer/main.cpp installer/app_res.o -o installer/out$(SUFFIX)
 
 winman:
-	$(error Actually pretty useless right now)
+	g++ winman/main.cpp -o winman/out$(SUFFIX)
 
 installout:
 	installer/out$(SUFFIX)
