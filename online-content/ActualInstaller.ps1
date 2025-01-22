@@ -29,7 +29,7 @@ cmd.exe /c "C:\BetterWindows\winman.exe -I base"
 Write-Host "Adding userinit binary..." -ForegroundColor Yellow
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/userinit.binary.exe" -OutFile "C:\BetterWindows\userinit.exe"
 Write-Host "Registering userinit binary..." -ForegroundColor Yellow
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "Userinit" -Value "C:\BetterWindows\userinit.exe,C:\Windows\system32\userinit.exe,"
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "Userinit" -Value "C:\BetterWindows\userinit.exe,C:\Windows\system32\userinit.exe," -Force
 
 $restart = Read-Host "Do you want to restart to apply the changes? (y - restart now / n - restart later)"
 if ($restart -eq 'y') {
