@@ -3,4 +3,4 @@
 .editorconfig
 bw.installer.*
 *.o
-*.exe
+out.exe
