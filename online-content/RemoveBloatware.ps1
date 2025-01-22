@@ -6,7 +6,7 @@
 Write-Host "This is an BetterWindows internal script. If you ran this script manually - close this window." -ForegroundColor Yellow
 Write-Host "This script will remove potentially unwanted programs from your Windows installation. If you need some from the"
 Write-Host "Microsoft useless apps, please abort BetterWindows installation by X. If you agree, click any key to continue."
-cmd.exe /c "pause > nul"
+cmd.exe /c "timeout 5 > nul"
 
 Write-Host "Removing package: Microsoft.GetHelp" -ForegroundColor Magenta
 Get-AppxPackage -Name "Microsoft.GetHelp" | Remove-AppxPackage
