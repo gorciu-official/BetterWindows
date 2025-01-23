@@ -4,7 +4,7 @@ else
     $(error Building BetterWindows on AurorOS/Linux/MacOS is kind of useless)
 endif
 
-.PHONY: all installer winman installout
+.PHONY: all installer winman installout winman-nonce
 
 all: installer installout
 
@@ -17,3 +17,6 @@ winman:
 
 installout:
 	installer/out$(SUFFIX)
+
+winman-nonce:
+	@certutil -hashfile online-content\winman.binary.exe SHA256
