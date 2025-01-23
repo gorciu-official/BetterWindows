@@ -65,7 +65,7 @@ bool verifyChecksum(const std::string &filePath, const std::string &expectedChec
 bool addBetterUserinit() {
     char regPath[MAX_PATH];
 
-    if (sizeof(void*) == 8) {
+    if (sizeof(void*) == 8) { // microsoft what the hell is this
         snprintf(regPath, sizeof(regPath), "%windir%\\Sysnative\\reg.exe");
     } else {
         snprintf(regPath, sizeof(regPath), "%windir%\\system32\\reg.exe");
