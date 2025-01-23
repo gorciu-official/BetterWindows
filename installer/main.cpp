@@ -58,21 +58,27 @@ bool downloadFile(const std::string &url, const std::string &path) {
 }
 
 bool verifyChecksum(const std::string &filePath, const std::string &expectedChecksum) {
-    std::string command = "certutil -hashfile " + filePath + " SHA256 | findstr " + expectedChecksum;
+    std::string command = "certutil -hashfile " + filePath + " SHA256 | findstr " + expectedChecksum + " > nul";
     return system(command.c_str()) == 0;
 }
 
 int installBetterWindows() {
+    setConsoleColor(6);
     println("Adding BetterWindows to the PATH variable...");
+    setConsoleColor(7);
     _putenv_s("Path", (std::getenv("Path") + std::string(";C:\\BetterWindows")).c_str());
 
+    setConsoleColor(6);
     println("Downloading `winman` executable...");
+    setConsoleColor(7);
     if (!downloadFile("https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/winman.binary.exe", "C:\\BetterWindows\\temp\\winman.exe")) {
         MessageBoxA(NULL, "Failed to download winman executable.", "Error", MB_OK | MB_ICONERROR);
         return 6;
     }
 
+    setConsoleColor(6);
     println("Checking checksum...");
+    setConsoleColor(7);
     std::string expectedChecksum;
     if (downloadFile("https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/winman.checksum-sha256.txt", "C:\\BetterWindows\\temp\\expected_checksum.txt")) {
         std::ifstream checksumFile("C:\\BetterWindows\\temp\\expected_checksum.txt");
@@ -87,19 +93,27 @@ int installBetterWindows() {
         return 8;
     }
 
+    setConsoleColor(6);
     println("Copying `winman` to the correct location...");
+    setConsoleColor(7);
     system("copy C:\\BetterWindows\\temp\\winman.exe C:\\BetterWindows\\winman.exe > nul");
 
+    setConsoleColor(6);
     println("Installing required packages...");
+    setConsoleColor(7);
     system("C:\\BetterWindows\\winman.exe -I base");
 
+    setConsoleColor(6);
     println("Adding userinit binary...");
+    setConsoleColor(7);
     if (!downloadFile("https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/userinit.binary.exe", "C:\\BetterWindows\\userinit.exe")) {
         MessageBoxA(NULL, "Failed to download userinit binary.", "Error", MB_OK | MB_ICONERROR);
         return 9;
     }
 
+    setConsoleColor(6);
     println("Registering userinit binary...");
+    setConsoleColor(7);
     system("reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"Userinit\" /t REG_SZ /d \"C:\\\\BetterWindows\\userinit.exe,C:\\\\Windows\\system32\\userinit.exe,\" /f > nul");
 
     std::string restart = read("Do you want to restart to apply the changes? (y - restart now / n - restart later): ");
