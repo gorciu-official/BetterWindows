@@ -16,6 +16,7 @@
 #endif 
 
 #include <iostream>
+#include <fstream>
 #include <windows.h>
 
 // ACT 2: INTERNALS
@@ -51,6 +52,69 @@ std::string read(std::string prefix) {
 
 // ACT 3: INSTALLER
 
+bool downloadFile(const std::string &url, const std::string &path) {
+    std::string command = "curl -s -L " + url + " -o " + path;
+    return system(command.c_str()) == 0;
+}
+
+bool verifyChecksum(const std::string &filePath, const std::string &expectedChecksum) {
+    std::string command = "certutil -hashfile " + filePath + " SHA256 | findstr " + expectedChecksum;
+    return system(command.c_str()) == 0;
+}
+
+int installBetterWindows() {
+    println("Adding BetterWindows to the PATH variable...");
+    _putenv_s("Path", (std::getenv("Path") + std::string(";C:\\BetterWindows")).c_str());
+
+    println("Downloading `winman` executable...");
+    if (!downloadFile("https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/winman.binary.exe", "C:\\BetterWindows\\temp\\winman.exe")) {
+        MessageBoxA(NULL, "Failed to download winman executable.", "Error", MB_OK | MB_ICONERROR);
+        return 6;
+    }
+
+    println("Checking checksum...");
+    std::string expectedChecksum;
+    if (downloadFile("https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/winman.checksum-sha256.txt", "C:\\BetterWindows\\temp\\expected_checksum.txt")) {
+        std::ifstream checksumFile("C:\\BetterWindows\\temp\\expected_checksum.txt");
+        std::getline(checksumFile, expectedChecksum);
+        checksumFile.close();
+        if (!verifyChecksum("C:\\BetterWindows\\temp\\winman.exe", expectedChecksum)) {
+            MessageBoxA(NULL, "Checksum is invalid. Installation aborted.", "Checksum Error", MB_OK | MB_ICONERROR);
+            return 7;
+        }
+    } else {
+        MessageBoxA(NULL, "Failed to download checksum.", "Error", MB_OK | MB_ICONERROR);
+        return 8;
+    }
+
+    println("Copying `winman` to the correct location...");
+    system("copy C:\\BetterWindows\\temp\\winman.exe C:\\BetterWindows\\winman.exe > nul");
+
+    println("Installing required packages...");
+    system("C:\\BetterWindows\\winman.exe -I base");
+
+    println("Adding userinit binary...");
+    if (!downloadFile("https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/userinit.binary.exe", "C:\\BetterWindows\\userinit.exe")) {
+        MessageBoxA(NULL, "Failed to download userinit binary.", "Error", MB_OK | MB_ICONERROR);
+        return 9;
+    }
+
+    println("Registering userinit binary...");
+    system("reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"Userinit\" /t REG_SZ /d \"C:\\\\BetterWindows\\userinit.exe,C:\\\\Windows\\system32\\userinit.exe,\" /f > nul");
+
+    std::string restart = read("Do you want to restart to apply the changes? (y - restart now / n - restart later): ");
+    if (restart == "y" || restart == "Y") {
+        system("shutdown /r /t 0");
+    } else {
+        println("BetterWindows needs to restart later to apply changes.");
+        Sleep(5000);
+        return 0;
+    }
+    return 0;
+}
+
+// ACT 4: FRONT OF INSTALLER
+
 int main() {
     while (true) {
         restartTerminal();
@@ -76,8 +140,7 @@ int main() {
             system("md C:\\BetterWindows\\temp\\installer");
             system("curl -s -L https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/RemoveBloatware.ps1 -o C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
             system("C:\\BetterWindows\\temp\\installer\\bloatwareremover.ps1");
-            system("curl -s -L https://raw.githubusercontent.com/TheBetterWindows/BetterWindows/refs/heads/main/online-content/ActualInstaller.ps1 -o C:\\BetterWindows\\temp\\installer\\installer.ps1");
-            system("C:\\BetterWindows\\temp\\installer\\installer.ps1");
+            return installBetterWindows();
             break;
         } else if (sel == "2") {
             break;
