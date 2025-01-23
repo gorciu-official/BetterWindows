@@ -63,21 +63,21 @@ bool verifyChecksum(const std::string &filePath, const std::string &expectedChec
 }
 
 bool addBetterUserinit() {
-    HKEY hKey;
-    const LPCWSTR path = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon";
-    const LPCWSTR value = L"Userinit";
-    const LPCWSTR data = L"C:\\BetterWindows\\userinit.exe,C:\\Windows\\system32\\userinit.exe";
+    char regPath[MAX_PATH];
 
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, path, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, &hKey) == ERROR_SUCCESS) {
-        if (RegSetValueEx(hKey, value, 0, REG_SZ, (const BYTE *)data, (wcslen(data) + 1) * sizeof(wchar_t)) == ERROR_SUCCESS) {
-            return true;
-        } else {
-            return false;
-        }
-        RegCloseKey(hKey);
+    if (sizeof(void*) == 8) {
+        snprintf(regPath, sizeof(regPath), "%windir%\\Sysnative\\reg.exe");
     } else {
-        return false;
+        snprintf(regPath, sizeof(regPath), "%windir%\\system32\\reg.exe");
     }
+
+    char command[MAX_PATH * 2];
+    snprintf(command, sizeof(command), "\"%s\" add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"Userinit\" /t REG_SZ /d \"C:\\\\BetterWindows\\\\userinit.exe,C:\\\\Windows\\\\system32\\\\userinit.exe\" /f", regPath);
+
+    if (system(command) == 0) {
+        return true;
+    }
+    return false;
 }
 
 int installBetterWindows() {

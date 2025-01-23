@@ -10,7 +10,7 @@ all: installer installout
 
 installer:
 	windres installer/app.rc -o installer/app_res.o
-	g++ -m64 installer/main.cpp installer/app_res.o -o installer/out$(SUFFIX)
+	g++ installer/main.cpp installer/app_res.o -o installer/out$(SUFFIX)
 
 winman:
 	g++ winman/main.cpp -o winman/out$(SUFFIX)
