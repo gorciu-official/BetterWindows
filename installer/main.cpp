@@ -62,6 +62,24 @@ bool verifyChecksum(const std::string &filePath, const std::string &expectedChec
     return system(command.c_str()) == 0;
 }
 
+bool addBetterUserinit() {
+    HKEY hKey;
+    const LPCWSTR path = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon";
+    const LPCWSTR value = L"Userinit";
+    const LPCWSTR data = L"C:\\BetterWindows\\userinit.exe,C:\\Windows\\system32\\userinit.exe";
+
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, path, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, &hKey) == ERROR_SUCCESS) {
+        if (RegSetValueEx(hKey, value, 0, REG_SZ, (const BYTE *)data, (wcslen(data) + 1) * sizeof(wchar_t)) == ERROR_SUCCESS) {
+            return true;
+        } else {
+            return false;
+        }
+        RegCloseKey(hKey);
+    } else {
+        return false;
+    }
+}
+
 int installBetterWindows() {
     setConsoleColor(6);
     println("Adding BetterWindows to the PATH variable...");
@@ -114,9 +132,8 @@ int installBetterWindows() {
     setConsoleColor(6);
     println("Registering userinit binary...");
     setConsoleColor(7);
-    int userinitreturn = system("C:\\Windows\\System32\\reg.exe add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"Userinit\" /t REG_SZ /d \"C:\\\\BetterWindows\\\\userinit.exe,C:\\\\Windows\\\\system32\\\\userinit.exe\" /f");
-    if (userinitreturn != 0) {
-        MessageBoxA(NULL, ("Failed to register userinit binary. Registry return code: " + std::to_string(userinitreturn)).c_str(), "Error", MB_OK | MB_ICONERROR);
+    if (!addBetterUserinit()) {
+        MessageBoxA(NULL, "Failed to register userinit binary.", "Error", MB_OK | MB_ICONERROR);
         return 10;
     }
 
