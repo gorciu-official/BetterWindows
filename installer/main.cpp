@@ -114,7 +114,11 @@ int installBetterWindows() {
     setConsoleColor(6);
     println("Registering userinit binary...");
     setConsoleColor(7);
-    system("reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"Userinit\" /t REG_SZ /d \"C:\\\\BetterWindows\\userinit.exe,C:\\\\Windows\\system32\\userinit.exe,\" /f > nul");
+    int userinitreturn = system("C:\\Windows\\System32\\reg.exe add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"Userinit\" /t REG_SZ /d \"C:\\\\BetterWindows\\\\userinit.exe,C:\\\\Windows\\\\system32\\\\userinit.exe\" /f");
+    if (userinitreturn != 0) {
+        MessageBoxA(NULL, ("Failed to register userinit binary. Registry return code: " + std::to_string(userinitreturn)).c_str(), "Error", MB_OK | MB_ICONERROR);
+        return 10;
+    }
 
     std::string restart = read("Do you want to restart to apply the changes? (y - restart now / n - restart later): ");
     if (restart == "y" || restart == "Y") {
